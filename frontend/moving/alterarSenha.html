@@ -35,18 +35,23 @@
 				
 				var endpoint = "http://localhost:8080/usuario";
 			
-				$scope.alterarSenha = function (usuario) {
+				$scope.alterarSenha = function (usuario, senha) {
 
-					$http.put(endpoint, usuario).then(function(result){
-						console.log(result.data);
-						alert("Senha alterada com sucesso");
-					}, function(result) {
-						if (result.status == 404) {
-							console.log('Erro 404');
-						}
-   						console.log('Request failed');
-   						$scope.emailNaoExiste = true;
-				    });
+					if (usuario.senha == senha.senha){
+
+						$http.put(endpoint, usuario).then(function(result){
+							console.log(result.data);
+							alert("Senha alterada com sucesso");
+						}, function(result) {
+							if (result.status == 404) {
+								console.log('Erro 404');
+							}
+	   						console.log('Request failed');
+	   						$scope.emailNaoExiste = true;
+					    });
+					} else {
+						alert("Senhas não conferem");
+					};
 				};
 				
 			});
@@ -66,7 +71,7 @@
 
 			<div class="form-group">
 
-			<h2>Login do sistema</h2>
+			
 
 				<table>
 					<tr>
@@ -88,7 +93,7 @@
 				</table>
 			</div>
 			<div>
-				<button type="submit" ng-click="alterarSenha(usuario)" ng-disabled="contatoForm.$invalid" class="btn btn-primary">Alterar senha</button>
+				<button type="submit" ng-click="alterarSenha(usuario, senha)" ng-disabled="contatoForm.$invalid" class="btn btn-primary">Alterar senha</button>
 
 				<a href="index.html" class="btn btn-primary">Voltar</a>
 

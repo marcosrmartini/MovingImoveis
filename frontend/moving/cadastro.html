@@ -36,14 +36,21 @@
 				var endpoint = "http://localhost:8080/usuario";
 			
 
-				$scope.adicionarUsuario = function (usuario) {
+				$scope.adicionarUsuario = function (usuario, senha) {
 					
-					$http.post(endpoint, usuario).then(function(result){
-						console.log(result.data);
-						delete $scope.usuario;	
-						delete $scope.senha;	
-						$scope.frmUsuario.$setPristine();
-					});
+					if (usuario.senha == senha.senha) {
+
+						$http.post(endpoint, usuario).then(function(result){
+							console.log(result.data);
+							delete $scope.usuario;	
+							delete $scope.senha;	
+							$scope.frmUsuario.$setPristine();
+						});
+
+					} else {
+						alert("Senhas não conferem");
+					};
+
 
 				};
 				
@@ -98,7 +105,7 @@
 				</table>
 			</div>
 			<div>
-				<button type="submit" ng-click="adicionarUsuario(usuario)" ng-disabled="contatoForm.$invalid" class="btn btn-primary">Gravar</button>
+				<button type="submit" ng-click="adicionarUsuario(usuario, senha)" ng-disabled="contatoForm.$invalid" class="btn btn-primary">Gravar</button>
 
 				<a href="index.html" class="btn btn-primary">Voltar</a>
 
