@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html ng-app="UsuarioApp" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<title>Cadastro de Usuários</title>
+<style type="text/css">
+.jumbotron {
+	width: 600px;
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+}
+</style>
+
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+
+<script type="text/javascript" src="angular/angular.js" ></script>
+<script type="text/javascript" src="angular/angular-messages.js" ></script>
+
+
+	 <script type="text/javascript">
+		angular.module("UsuarioApp", ["ngMessages"]);	
+			angular.module("UsuarioApp").controller("usuarioController", function($scope, $http){
+
+
+				$scope.app = "cadastro de usuarios";
+				$scope.usuario = {};
+				$scope.senha = {};
+				$scope.emailNaoExiste = false;
+				
+
+				
+				var endpoint = "http://localhost:8080/usuario";
+			
+				$scope.alterarSenha = function (usuario) {
+
+					$http.put(endpoint, usuario).then(function(result){
+						console.log(result.data);
+						alert("Senha alterada com sucesso");
+					}, function(result) {
+						if (result.status == 404) {
+							console.log('Erro 404');
+						}
+   						console.log('Request failed');
+   						$scope.emailNaoExiste = true;
+				    });
+				};
+				
+			});
+		
+		
+		
+		</script>
+
+
+</head>
+<body ng-controller="usuarioController">
+
+	<form name="frmUsuario" style="margin: 20px 0">
+
+		<div class="jumbotron">
+
+
+			<div class="form-group">
+
+			<h2>Login do sistema</h2>
+
+				<table>
+					<tr>
+						<td><span class="label label-default">Email:</span></td>
+						<td><input type="text" class="form-control" style="min-width:400px;"
+							placeholder="Email" ng-required="true" ng-model="usuario.email" /></td>
+					</tr>
+
+					<tr>
+						<td><span class="label label-default">Senha:</span></td>
+						<td><input type="password" class="form-control"
+							placeholder="Senha" ng-model="usuario.senha" ng-required="true"/></td>
+					</tr>
+					<tr>
+						<td><span class="label label-default">Confirmar senha:</span></td>
+						<td><input type="password" class="form-control"
+							placeholder="Confirmar senha" ng-model="senha.senha" ng-required="true"/></td>
+					</tr>
+				</table>
+			</div>
+			<div>
+				<button type="submit" ng-click="alterarSenha(usuario)" ng-disabled="contatoForm.$invalid" class="btn btn-primary">Alterar senha</button>
+
+				<a href="index.html" class="btn btn-primary">Voltar</a>
+
+			</div>	
+		</div>
+
+		<div ng-show="emailNaoExiste" class="alert alert-danger">
+			Email não existe
+		</div>
+		
+
+
+	</form>
+</body>
+</html>

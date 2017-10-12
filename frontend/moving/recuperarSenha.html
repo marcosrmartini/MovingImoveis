@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html ng-app="UsuarioApp" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<title>Cadastro de Usuários</title>
+<style type="text/css">
+.jumbotron {
+	width: 600px;
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+}
+</style>
+
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+
+<script type="text/javascript" src="angular/angular.js" ></script>
+<script type="text/javascript" src="angular/angular-messages.js" ></script>
+
+
+	 <script type="text/javascript">
+		angular.module("UsuarioApp", ["ngMessages"]);	
+			angular.module("UsuarioApp").controller("usuarioController", function($scope, $http){
+
+
+				$scope.app = "cadastro de usuarios";
+				$scope.usuario = {};
+				$scope.senha = {};
+				$scope.emailNaoExiste = false;
+				
+
+				
+				var endpoint = "http://localhost:8080/usuario";
+
+
+				$scope.recuperarSenha = function (usuario) {
+
+					var status;
+
+					var config = {
+ 					   params: {
+        					email: usuario.email
+    					}
+					};
+					
+					$http.get(endpoint, config).then(function(result){
+						console.log(result.data);
+						$scope.emailNaoExiste = false;
+						alert("Sua senha foi enviada para seu email");
+					}, function(result) {
+						if (result.status == 404) {
+							console.log('Erro 404');
+						}
+   						console.log('Request failed');
+   						$scope.emailNaoExiste = true;
+				    });
+					
+					
+
+				};
+
+				
+			});
+		
+		
+		
+		</script>
+
+
+</head>
+<body ng-controller="usuarioController">
+
+	<form name="frmUsuario" style="margin: 20px 0">
+
+		<div class="jumbotron">
+
+
+			<div class="form-group">
+
+
+				<table>
+					<tr>
+						<td><span class="label label-default">Email:</span></td>
+						<td><input type="text" class="form-control" style="min-width:400px;"
+							placeholder="Email" ng-required="true" ng-model="usuario.email" /></td>
+					</tr>
+				</table>
+			</div>
+			<div>
+				<button type="submit" ng-click="recuperarSenha(usuario)" ng-disabled="contatoForm.$invalid" class="btn btn-primary">Recuperar senha</button>
+
+				<a href="index.html" class="btn btn-primary">Voltar</a>
+
+			</div>	
+		</div>
+
+		<div ng-show="emailNaoExiste" class="alert alert-danger">
+			Email não existe
+		</div>
+		
+
+
+	</form>
+</body>
+</html>
